@@ -1,5 +1,5 @@
 # 我的餐廳清單
-![restaurant-list](https://raw.githubusercontent.com/Cappcino/restaurant_list/main/public/images/restaurant_list_screenshot.png)
+![restaurant-list](https://raw.githubusercontent.com/Cappcino/restaurant_list/main/public/images/restaurant-list-screenshot.png)
 ## 介紹
 紀錄自己的餐廳清單
 ### 功能
