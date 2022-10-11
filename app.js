@@ -2,7 +2,7 @@
 const express = require('express')
 const app = express()
 const port = 3000
-const restaurantList = require('./restaurant.json')
+const Restaurant =require('./models/restaurant')
 
 // require express-handlebars here
 const exphbs = require('express-handlebars')
@@ -28,9 +28,12 @@ app.set('view engine', 'handlebars')
 // setting static files
 app.use(express.static('public'))
 
-// routes setting
+// 瀏覽所有餐廳
 app.get('/', (_req, res) => {
-  res.render('index', { restaurants: restaurantList.results })
+  Restaurant.find() 
+    .lean() 
+    .then(restaurants => res.render('index', { restaurants })) 
+    .catch(error => console.error(error)) 
 })
 
 //show page
