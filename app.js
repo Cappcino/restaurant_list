@@ -2,9 +2,7 @@
 const express = require('express')
 const app = express()
 const port = 3000
-const Restaurant =require('./models/restaurant')
-
-// require express-handlebars here
+const restaurantList =require('./models/restaurant')
 const exphbs = require('express-handlebars')
 
 // mongoose
@@ -24,22 +22,35 @@ db.once('open', () => {
 // setting template engine
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
-
 // setting static files
 app.use(express.static('public'))
+app.use(express.urlencoded({ extended: true }))
 
 // 瀏覽所有餐廳
 app.get('/', (_req, res) => {
-  Restaurant.find() 
+  restaurantList.find() 
     .lean() 
-    .then(restaurants => res.render('index', { restaurants })) 
+    .then((restaurants) => res.render('index', { restaurants })) 
     .catch(error => console.error(error)) 
 })
 
-//show page
+// 新增餐廳
+app.get('/restaurants/new', (_req, res) => {
+  res.render('new')
+})
+app.post("/restaurants", (req, res) => {
+  restaurantList.create(req.body)
+    .then(() => res.redirect("/"))
+    .catch(error => console.log(error))
+})
+
+// 瀏覽特定頁面
 app.get('/restaurants/:restaurant_id', (req, res) => {
-  const restaurant = restaurantList.results.find(restaurant => restaurant.id.toString() === req.params.restaurant_id)
-  res.render('show', { restaurant: restaurant })
+  const id = req.params.restaurant_id
+  restaurantList.findById(id)
+    .lean()
+    .then((restaurants) => res.render('show',{ restaurants }))
+    .catch(error => console.log(error))
 })
 
 // search
