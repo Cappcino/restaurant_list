@@ -78,6 +78,9 @@ app.post('/restaurants/:restaurant_id/delete',(req ,res) => {
 // search
 app.get('/search', (_req, res) => {
   const keyword = _req.query.keyword.trim()
+  if(!keyword) {
+    return res.redirect('/')
+  }
   restaurantList.find({})
     .lean()
     .then(restaurants => {
@@ -86,7 +89,7 @@ app.get('/search', (_req, res) => {
           data.name.toLowerCase().includes(keyword) ||
           data.category.includes(keyword)
       )
-      res.render("index", { restaurants: searchRestaurant, keyword })
+      res.render('index', { restaurants: searchRestaurant, keyword })
     })
     .catch(err => console.log(err))
 })
