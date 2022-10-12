@@ -49,17 +49,46 @@ app.get('/restaurants/:restaurant_id', (req, res) => {
   const id = req.params.restaurant_id
   restaurantList.findById(id)
     .lean()
-    .then((restaurants) => res.render('show',{ restaurants }))
+    .then((restaurants) => res.render('show', { restaurants }))
     .catch(error => console.log(error))
 })
 
+// 修改特定頁面
+app.get('/restaurants/:restaurant_id/edit', (req, res) => {
+  const id = req.params.restaurant_id
+  restaurantList.findById(id)
+    .lean()
+    .then((restaurants) => res.render('edit', { restaurants }))
+    .catch(error => console.log(error))
+})
+app.post('/restaurants/:restaurant_id/edit', (req, res) => {
+  const id = req.params.restaurant_id
+  restaurantList.findByIdAndUpdate(id, req.body)
+    .then(() => res.redirect(`/restaurants/${ id }`))
+    .catch(error => console.log(error))
+})
+// 刪除特定頁面
+app.post('/restaurants/:restaurant_id/delete',(req ,res) => {
+  const id = req.params.restaurant_id
+  return restaurantList.findById(id)
+    .then(restaurants => restaurants.remove())
+    .then(() => res.redirect('/'))
+    .catch(error => console.log(error))
+})
 // search
 app.get('/search', (_req, res) => {
-  const keyword = _req.query.keyword
-  const restaurants = restaurantList.results.filter(restaurant => {
-    return restaurant.name.toLowerCase().includes(keyword.toLowerCase()) || restaurant.category.toLowerCase().includes(keyword.toLowerCase())
-  })
-  res.render('index', { restaurants: restaurants })
+  const keyword = _req.query.keyword.trim()
+  restaurantList.find({})
+    .lean()
+    .then(restaurants => {
+      const searchRestaurant = restaurants.filter(
+        data =>
+          data.name.toLowerCase().includes(keyword) ||
+          data.category.includes(keyword)
+      )
+      res.render("index", { restaurants: searchRestaurant, keyword })
+    })
+    .catch(err => console.log(err))
 })
 
 // start and listen on the Express server
