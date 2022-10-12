@@ -12,8 +12,8 @@
           </div>
          </div>
       </form>
-      <div class="text-end">
-        <a href="./restaurants/new"><button class="btn btn-primary" type="submit" id="search-button">新增餐廳</button></a>
+      <div class="text-start">
+        <a href="./restaurants/new"><button class="btn btn-major" type="submit" id="search-button">新增餐廳</button></a>
       </div>
     </div>
   </div>
@@ -45,7 +45,7 @@
              <div class="card-footer d-flex justify-content-end flex-wrap">
               <a href="/restaurants/{{this._id}}/edit"><button class="btn btn-link btn-sm">Edit</button></a>
               <a href="/restaurants/{{this._id}}"><button class="btn btn-link btn-sm">Details</button></a>
-              <form action="/restaurants/{{this._id}}?_method=DELETE" method="POST">
+              <form action="/restaurants/{{this._id}}/delete" method="POST">
                 <button type="submit" class="btn btn-danger btn-sm text-white">delete</button>
               </form>
              </div>
