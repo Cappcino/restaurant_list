@@ -30,6 +30,7 @@ app.use(express.urlencoded({ extended: true }))
 app.get('/', (_req, res) => {
   restaurantList.find() 
     .lean() 
+    .sort({ _id: 'asc'})
     .then((restaurants) => res.render('index', { restaurants })) 
     .catch(error => console.error(error)) 
 })
