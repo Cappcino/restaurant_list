@@ -4,7 +4,6 @@ const exphbs = require('express-handlebars')
 const methodOverride = require('method-override')
 const app = express()
 const port = 3000
-const restaurantList =require('./models/restaurant')
 
 const routes = require('./routes')
 
@@ -20,6 +19,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 app.use(routes)
 require('./config/mongoose')
+
 
 
 // start and listen on the Express server
