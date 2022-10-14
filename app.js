@@ -1,9 +1,12 @@
 // require packages used in the project
 const express = require('express')
+const exphbs = require('express-handlebars')
+const methodOverride = require('method-override')
 const app = express()
 const port = 3000
 const restaurantList =require('./models/restaurant')
-const exphbs = require('express-handlebars')
+
+
 
 // mongoose
 const mongoose = require('mongoose')
@@ -25,6 +28,7 @@ app.set('view engine', 'handlebars')
 // setting static files
 app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
+app.use(methodOverride('_method'))
 
 // 瀏覽所有餐廳
 app.get('/', (_req, res) => {
@@ -62,14 +66,14 @@ app.get('/restaurants/:restaurant_id/edit', (req, res) => {
     .then((restaurants) => res.render('edit', { restaurants }))
     .catch(error => console.log(error))
 })
-app.post('/restaurants/:restaurant_id/edit', (req, res) => {
+app.put('/restaurants/:restaurant_id', (req, res) => {
   const id = req.params.restaurant_id
   restaurantList.findByIdAndUpdate(id, req.body)
     .then(() => res.redirect(`/restaurants/${ id }`))
     .catch(error => console.log(error))
 })
 // 刪除特定頁面
-app.post('/restaurants/:restaurant_id/delete',(req ,res) => {
+app.delete('/restaurants/:restaurant_id',(req ,res) => {
   const id = req.params.restaurant_id
   return restaurantList.findById(id)
     .then(restaurants => restaurants.remove())
